@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StockPhoto.Data;
 using StockPhoto.Entities;
+using StockPhoto.Services;
 using System.Reflection.PortableExecutable;
 
 namespace StockPhoto.Controllers
@@ -11,12 +12,16 @@ namespace StockPhoto.Controllers
     public class PhotoController : ControllerBase
     {
         private readonly StockPhotoDbContext _context;
-        public PhotoController(StockPhotoDbContext context)
+        private readonly IAltPhotoService  _pService;
+
+        public PhotoController(StockPhotoDbContext context, IAltPhotoService photoService)
         {
             _context = context;
+            _pService = photoService;
+
         }
 
-        [HttpGet("id")]
+        /*[HttpGet("id")]
 
         public async Task<ActionResult<List<AltPhoto>>> GetPhotoById(int id)
         {
@@ -29,9 +34,34 @@ namespace StockPhoto.Controllers
                 return BadRequest($"You do not have {id} id");
             else
                 return Ok(characters);
-        }
+        }*/
 
-        [HttpPost]
-        public async Task<IActionResult>
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPostAsync([FromRoute] int id)
+        {
+            var photo = await _pService.GetPhotoByIdAsync(id);
+
+            if(photo == default)
+            {
+                return NotFound();
+            }
+
+            
+            
+            return Ok(new
+            {
+                Id = photo.Id,
+                Name = photo.Name,
+                Link = photo.Link,
+                Origional_Size = photo.Original_Size,
+                Date_Of_Creation = photo.Date_Of_Creation,
+                Author = photo.Author,
+                Cost = photo.Cost,
+                Num_of_Sales = photo.Num_of_Sales,
+                Photo_Rating = photo.Photo_Rating,
+            }); 
+            
+        }
     }
 }

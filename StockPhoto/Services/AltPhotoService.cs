@@ -31,5 +31,20 @@ namespace StockPhoto.Services
 
         public Task<bool> PhotoExistsAsync(int id)
         => _ctx.Photos.AnyAsync(m => m.Id == id);
+
+        public async Task<(bool IsSuccess, Exception Exception)> UpdatePhotoAsync(AltPhoto altPhoto)
+        {
+            try
+            {
+                _ctx.Photos.Update(altPhoto);
+                await _ctx.SaveChangesAsync();
+                return (true, null);
+            }
+            catch(Exception e)
+            {
+                return (false, e);
+            }
+        }
+
     }
 }

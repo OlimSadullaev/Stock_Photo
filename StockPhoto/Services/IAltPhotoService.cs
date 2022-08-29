@@ -1,4 +1,5 @@
-﻿using StockPhoto.Entities;
+﻿using Microsoft.Extensions.Hosting;
+using StockPhoto.Entities;
 
 namespace StockPhoto.Services
 {
@@ -7,6 +8,8 @@ namespace StockPhoto.Services
         public Task<AltPhoto> GetPhotoByIdAsync(int id);
 
         public Task<(bool IsSuccess, Exception? Exception)> InsertPhotoAsync(AltPhoto photo);
+
+        public Task<(bool IsSuccess, Exception Exception)> UpdatePhotoAsync(AltPhoto altPhoto);
 
         public Task<bool> PhotoExistsAsync(int id);
     }
